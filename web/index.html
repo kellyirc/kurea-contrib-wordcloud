@@ -6,6 +6,18 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         .navbar { margin-bottom: 0; }
+        #vis {
+            height: calc(100% - 60px);
+            width: 100%;
+        }
+        #vis span {
+            margin-top: 50px;
+        }
+        body, html {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -27,9 +39,6 @@
     var channel = '';
     var server = '';
 
-    var width = window.innerWidth - 10;
-    var height = window.innerHeight - 60; //bootstrap header
-
     // gotta love hashes in the url just doing hash things
     parts.forEach(function(part) {
         if(part.indexOf('channel') !== -1) { channel = part.split('=')[1]; }
@@ -48,9 +57,7 @@
             });
 
             var node = document.getElementById('vis');
-            node.style.height = height+'px';
-            node.style.width = width+'px';
-            WordCloud(node, { list: list, weightFactor: 7, shape: 'circle', ellipicity: 0.9, rotateRatio: 0.5 });
+            WordCloud(node, { list: list, weightFactor: 2, shape: 'circle', ellipicity: 0.5, rotateRatio: 0.3 });
         });
 </script>
 </body>
