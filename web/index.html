@@ -10,6 +10,25 @@
             height: calc(100% - 60px);
             width: 100%;
         }
+        #canvas-hover {
+            position: absolute;
+            border: 2px solid #fff;
+            box-shadow: 0 0 4px 0 #008;
+            padding: 2px;
+            margin: -4px 0 0 -4px;
+            pointer-events: none;
+        }
+        #canvas-hover-label {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgba(#fff, 0.8);
+            color: #333;
+            margin-top: 6px;
+            padding: 0 0.5em;
+            border-radius: 0.5em;
+            white-space: nowrap;
+        }
         #vis span {
             margin-top: 50px;
         }
@@ -52,9 +71,12 @@
     var request = new Http.Post('./data', {server: server, channel: channel})
         .start()
         .then(function(response) {
+
             var words = JSON.parse(response).words;
+
             var total = words.reduce(function(prev, cur) { return prev + cur.value; }, 0);
             document.getElementById('data-dump').innerText = words.length + ' total words, ' + total + ' instances counted for '+server+channel;
+
             var list = [];
             words.forEach(function(word) {
                 if(blacklist.indexOf(word._id) !== -1) return;
@@ -62,7 +84,10 @@
             });
 
             var node = document.getElementById('vis');
-            WordCloud(node, { list: list, weightFactor: 3, shape: 'circle', ellipicity: 0.5, rotateRatio: 0.3 });
+            WordCloud(node, { list: list, shape: function shapeSquare(theta) {
+                var thetaPrime = (theta + Math.PI / 4) % (2 * Math.PI / 4);
+                return 1 / (Math.cos(thetaPrime) + Math.sin(thetaPrime));
+            }});
         });
 </script>
 </body>
