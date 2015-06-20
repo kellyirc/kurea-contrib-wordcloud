@@ -1,0 +1,21 @@
+{
+  "name": "kurea-contrib-wordcloud",
+  "version": "0.0.0",
+  "description": "a wordcloud generator",
+  "main": "index.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kellyirc/kurea-contrib-wordcloud.git"
+  },
+  "author": "Kyle Kemp <kyle@seiyria.com> (http://seiyria.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kellyirc/kurea-contrib-wordcloud/issues"
+  },
+  "dependencies": {
+    "lodash": "~3.9.3"
+  }
+}
