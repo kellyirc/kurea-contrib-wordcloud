@@ -53,6 +53,7 @@
             document.getElementById('data-dump').innerText = words.length + ' total words, ' + total + ' instances counted for '+server+channel;
             var list = [];
             words.forEach(function(word) {
+                if(word._id.length <3) return;
                 list.push([word._id, word.value]);
             });
 
