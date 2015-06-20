@@ -36,6 +36,7 @@
             height: 100%;
             padding: 0;
             margin: 0;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -84,7 +85,7 @@
             });
 
             var node = document.getElementById('vis');
-            WordCloud(node, { list: list, shape: function shapeSquare(theta) {
+            WordCloud(node, { list: list, weightFactor: function(pt) { return pt > 25 ? pt*2 : pt*4; }, gridSize: 3, shape: function shapeSquare(theta) {
                 var thetaPrime = (theta + Math.PI / 4) % (2 * Math.PI / 4);
                 return 1 / (Math.cos(thetaPrime) + Math.sin(thetaPrime));
             }});
