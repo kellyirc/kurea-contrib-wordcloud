@@ -41,7 +41,7 @@ module.exports = (Module) ->
 
           # I have no idea why I have to do this
           finalize: (key, reducedValue) -> reducedValue
-          limit: 5000
+          limit: 2500
           jsMode: yes
           verbose: no
           out: inline: 1
