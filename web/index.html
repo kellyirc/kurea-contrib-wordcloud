@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>wordcloud</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        .navbar { margin-bottom: 0; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">Kurea Wordcloud</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href id="data-dump"></a></li>
+        </ul>
+    </div>
+</nav>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="https://rawgit.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
+<script>
+    var parts = location.href.split('?')[1].split('&');
+    var channel = '';
+    var server = '';
+
+    var width = window.innerWidth - 1;
+    var height = window.innerHeight - 60; //bootstrap header
+
+    // gotta love hashes in the url just doing hash things
+    parts.forEach(function(part) {
+        if(part.indexOf('channel') !== -1) { channel = part.split('=')[1]; }
+        if(part.indexOf('server') !== -1) { server = part.split('=')[1]; }
+    });
+
+    d3.json('./data')
+            .header("Content-Type", "application/json")
+            .post(JSON.stringify({server: server, channel: channel}), function(e, data) {
+
+                var total = data.words.reduce(function(prev, cur) { return prev + cur.value; }, 0);
+
+                document.getElementById('data-dump').innerText = data.words.length + ' total words, ' + total + ' instances counted';
+
+                var fontSize = d3.scale.log().range([10, 100]);
+                var fill = d3.scale.category20();
+                d3.layout.cloud().size([width, height])
+                        .words(data.words)
+                        .padding(1)
+                        .timeInterval(10)
+                        .rotate(function() { return ~~(Math.random() * 5) * 30 - 60; })
+                        .font("Impact")
+                        .fontSize(function(d) { return fontSize(d.value); })
+                        .on("end", draw)
+                        .start();
+
+                function draw(words) {
+                    d3.select("body").append("svg")
+                            .attr("width", width)
+                            .attr("height", height)
+                            .append("g")
+                            .attr("transform", "translate(150,150)")
+                            .selectAll("text")
+                            .data(words)
+                            .enter().append("text")
+                            .style("font-size", function(d) { return d.size + "px"; })
+                            .style("font-family", "Impact")
+                            .style("fill", function(d, i) { return fill(i); })
+                            .attr("text-anchor", "middle")
+                            .attr("transform", function(d) {
+                                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                            })
+                            .text(function(d) { return d._id; });
+                }
+            });
+</script>
+</body>
+</html>
