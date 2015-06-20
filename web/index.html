@@ -45,6 +45,10 @@
         if(part.indexOf('server') !== -1) { server = part.split('=')[1]; }
     });
 
+    var blacklist = ['the', 'be', 'and', 'of', 'a', 'in', 'to', 'have', 'it', 'i', 'that', 'for', 'you', 'he', 'with',
+    'on', 'do', 'say', 'this', 'they', 'at', 'but', 'we', 'his', 'from', 'that', 'not', 'by', 'she', 'or', 'as', 'what',
+    'go', 'their', 'can', 'who', 'get', 'if', 'would', 'her', 'all', 'my', 'make', 'about', 'know', 'will', 'as', 'up', 'is'];
+
     var request = new Http.Post('./data', {server: server, channel: channel})
         .start()
         .then(function(response) {
@@ -53,12 +57,12 @@
             document.getElementById('data-dump').innerText = words.length + ' total words, ' + total + ' instances counted for '+server+channel;
             var list = [];
             words.forEach(function(word) {
-                if(word._id.length <= 3) return;
+                if(blacklist.indexOf(word._id) !== -1) return;
                 list.push([word._id, word.value]);
             });
 
             var node = document.getElementById('vis');
-            WordCloud(node, { list: list, weightFactor: 2, shape: 'circle', ellipicity: 0.5, rotateRatio: 0.3 });
+            WordCloud(node, { list: list, weightFactor: 5, shape: 'circle', ellipicity: 0.5, rotateRatio: 0.3 });
         });
 </script>
 </body>
